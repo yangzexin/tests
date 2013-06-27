@@ -1,0 +1,100 @@
+
+tell application "Messages"
+    activate
+end tell
+tell application "System Events"
+    set destinationField to 0
+    set contentArea to 0
+    tell process "Messages"
+        set elements to get entire contents of front window
+        repeat with i from 1 to length of elements
+            set element to item i of elements
+            if class of element as string = "sheet" then
+                tell application "Messages"
+                    activate
+                    tell application "System Events"
+                        key code 52
+                        exit repeat
+                    end tell
+                end tell
+            end if
+        end repeat
+    end tell
+
+    tell process "Messages"
+        tell application "Messages"
+            activate
+        end tell
+
+        key code 51 using command down
+        set elements to get entire contents of front window
+        --display dialog (length of elements)
+        repeat with i from 1 to length of elements
+            set element to item i of elements
+            if class of element as string = "sheet" then
+                --display dialog (class of element as string)
+                tell application "Messages"
+                    activate
+                    tell application "System Events"
+                        key code 52
+                    end tell
+                end tell
+                exit repeat
+            end if
+        end repeat
+
+        keystroke "n" using {command down}
+        delay 1.5
+    end tell
+
+    tell process "Messages"
+        set elements to get entire contents of front window
+        repeat with i from 1 to length of elements
+            set element to item i of elements
+            if class of element as string is "text area" then
+                --set value of element to "content"
+                set contentArea to element
+            else if class of element as string is "text field" then
+                set tmpTitle to title of element as string
+                if tmpTitle is not "" then
+                    --set value of element to "destination"
+                    set destinationField to element
+                end if
+            end if
+        end repeat
+    end tell
+
+    tell process "Messages"
+        if destinationField is not 0 then
+            set value of destinationField to "$destination"
+        else
+            --display dialog ("destination field not foud")
+        end if
+        set looped to 0
+        if contentArea is not 0 then
+            set value of contentArea to "$messageContent"
+            repeat
+                tell application "Messages"
+                    activate
+                end tell
+                if looped is 1 then
+                    delay 1
+                end if
+                key code 48
+                if focused of contentArea then
+                    exit repeat
+                end if
+                if looped is 0 then
+                    set looped to 1
+                end if
+            end repeat
+            delay 2
+            tell application "Messages"
+                activate
+                set bounds of front window to {0, 0, 700, 500}
+            end tell
+        else
+            --display dialog ("content area not foud")
+        end if
+    end tell
+end tell
