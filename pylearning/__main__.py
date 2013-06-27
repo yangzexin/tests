@@ -114,9 +114,11 @@ print(T.index(4));
 print(T.count(4));
 
 #Files
+"""
 f = open("test.txt", "w")
 f.write("hello\n");
 f.close();
+"""
 
 #Other
 X = set("spam")
