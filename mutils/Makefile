@@ -3,8 +3,13 @@ THEOS_DEVICE_IP = 10.0.2.27
 include theos/makefiles/common.mk
 
 APPLICATION_NAME = mutils
-mutils_FILES = main.m mutilsApplication.mm RootViewController.mm
+
+# compile files
+mutils_FILES = main.m mutilsApplication.mm RootViewController.m IMessageUtils.m
+mutils_FILES += SingleSendController.m
 mutils_FILES += IMessageTracker.m
+
+# other settings
 mutils_FRAMEWORKS = UIKit CoreGraphics
 mutils_LDFLAGS = -lsqlite3
 
