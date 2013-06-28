@@ -7,6 +7,7 @@
 //
 
 #import "MultipleSendController.h"
+#import "IMessageUtils.h"
 
 @interface MultipleSendController ()
 
@@ -58,9 +59,33 @@
     [alertView show];
 }
 
+- (void)enumerateTextViewNumbersWithNumberHandler:(void(^)(NSString *))numberHandler
+{
+    if(self.textView.text.length != 0){
+        NSArray *numbers = [self.textView.text componentsSeparatedByString:@"\n"];
+        if(numbers.count != 0){
+            for(NSString *number in numbers){
+                number = [number stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                if(number.length != 0){
+                    if(number.length == 11){
+                        number = [NSString stringWithFormat:@"+86%@", number];
+                    }
+                    numberHandler(number);
+                }
+            }
+        }
+    }
+}
+
 - (void)sendButtonTapped
 {
-    [self alert:self.textView.text];
+    NSTimeInterval startTime = [NSDate timeIntervalSinceReferenceDate];
+    [self enumerateTextViewNumbersWithNumberHandler:^(NSString *number){
+        NSError *error = NULL;
+        BOOL success = [IMessageUtils sendIMessageWithRecipient:number text:@"text" error:&error];
+        NSLog(@"%@", success ? @"success" : @"fail");
+    }];
+    [self alert:[NSString stringWithFormat:@"cost:%f", [NSDate timeIntervalSinceReferenceDate] - startTime]];
 }
 
 @end

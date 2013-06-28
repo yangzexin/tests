@@ -18,7 +18,7 @@
      */
     BOOL success = NO;
     
-    const int timeoutInterval = 5;
+    const int timeoutInterval = 3.5;
     const int maxTryCount = 20;
     const NSTimeInterval sleepInterval = ((NSTimeInterval)timeoutInterval) / maxTryCount;
     int tryCount = 0;
