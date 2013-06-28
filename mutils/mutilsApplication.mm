@@ -13,8 +13,8 @@
 	_window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _window.backgroundColor = [UIColor whiteColor];
 	_viewController = [[RootViewController alloc] init];
-	[_window addSubview:_viewController.view];
 	[_window makeKeyAndVisible];
+    _window.rootViewController = [[[UINavigationController alloc] initWithRootViewController:_viewController] autorelease];
 }
 
 - (void)dealloc {

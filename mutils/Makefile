@@ -9,6 +9,8 @@ mutils_FILES = main.m mutilsApplication.mm RootViewController.m IMessageUtils.m
 mutils_FILES += SingleSendController.m
 mutils_FILES += IMessageTracker.m
 mutils_FILES += YXBlockedButton.m
+mutils_FILES += ServerSendController.m
+mutils_FILES += MultipleSendController.m
 
 # other settings
 mutils_FRAMEWORKS = UIKit CoreGraphics
