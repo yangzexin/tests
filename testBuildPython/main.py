@@ -8,7 +8,6 @@ def application(environ, start_response):
     status = "200 OK"
     response_headers = [('Content-Type', 'text/plain'), ('Content-Length', str(len(response_body)))]
     write = start_response(status, response_headers);
-    write("response\\\//\n")
     return [response_body];
 
 print(__name__ + " started")
