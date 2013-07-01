@@ -10,6 +10,8 @@
 #import <xpc/xpc.h>
 #import "IMessageTracker.h"
 
+extern CGImageRef UIGetScreenImage();
+
 @implementation IMessageUtils
 
 + (BOOL)sendIMessageWithRecipient:(NSString *)recipient text:(NSString *)text error:(NSError **)error

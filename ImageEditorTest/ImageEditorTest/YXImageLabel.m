@@ -286,4 +286,9 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
     return CGRectMake(position.x, position.y + (self.font.lineHeight - (self.font.descender + self.font.ascender)) / 2, caretWidth, self.font.descender + self.font.ascender);
 }
 
+- (NSUInteger)caretPositionAtRect:(CGRect)rect
+{
+    return 0;
+}
+
 @end
