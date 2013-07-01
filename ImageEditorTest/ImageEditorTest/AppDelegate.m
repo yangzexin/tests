@@ -24,7 +24,7 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    ImageEditor *editor = [[[ImageEditor alloc] initWithFrame:CGRectMake(0, 20, 320, 300)] autorelease];
+    ImageEditor *editor = [[[ImageEditor alloc] initWithFrame:CGRectMake(0, 20, 320, 200)] autorelease];
     [self.window addSubview:editor];
     
     return YES;
