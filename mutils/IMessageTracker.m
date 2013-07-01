@@ -49,12 +49,16 @@
             sqlite3_finalize(stmt);
             
             if(++tryCount == maxTryCount){
-                *error = [NSError errorWithDomain:@"" code:-2 userInfo:[NSDictionary dictionaryWithObject:@"check time out" forKey:NSLocalizedDescriptionKey]];
+                if(error){
+                    *error = [NSError errorWithDomain:@"" code:-2 userInfo:[NSDictionary dictionaryWithObject:@"check time out" forKey:NSLocalizedDescriptionKey]];
+                }
                 break;
             }
         }
     }else{
-        *error = [NSError errorWithDomain:@"" code:-1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"cannot open database at path:%@", smsDbPath] forKey:NSLocalizedDescriptionKey]];
+        if(error){
+            *error = [NSError errorWithDomain:@"" code:-1 userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"cannot open database at path:%@", smsDbPath] forKey:NSLocalizedDescriptionKey]];
+        }
     }
     sqlite3_close(dbHandler);
     

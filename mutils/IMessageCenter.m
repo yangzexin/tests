@@ -43,6 +43,7 @@
     self = [super init];
     
     self.operationQueue = [[NSOperationQueue new] autorelease];
+    [self.operationQueue setMaxConcurrentOperationCount:3];
     
     return self;
 }

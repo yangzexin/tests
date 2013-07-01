@@ -7,7 +7,7 @@
 //
 
 #import "MultipleSendController.h"
-#import "IMessageUtils.h"
+#import "IMessageCenter.h"
 
 @interface MultipleSendController ()
 
@@ -21,6 +21,7 @@
 
 - (void)dealloc
 {
+    [[IMessageCenter sharedInstance] setMessageResultHandler:nil];
     self.textView = nil;
     [super dealloc];
 }
@@ -45,7 +46,7 @@
 {
     [super viewDidLoad];
     self.title = @"批量发送";
-    self.textView.text = @"+8618607072318\n+8618607072328\n+8618607072338\n";
+    self.textView.text = @"+8618607072328\n+8618607072318\n+8618607072338\n";
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,9 +72,7 @@
                     if(number.length == 11){
                         number = [NSString stringWithFormat:@"+86%@", number];
                     }
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                        numberHandler(number);
-                    });
+                    numberHandler(number);
                 }
             }
         }
@@ -83,10 +82,12 @@
 - (void)sendButtonTapped
 {
     NSTimeInterval startTime = [NSDate timeIntervalSinceReferenceDate];
+    __block __typeof(self) bself = self;
+    [[IMessageCenter sharedInstance] setMessageResultHandler:^(BOOL success, NSString *recipient, NSString *text){
+        [bself alert:[NSString stringWithFormat:@"%@:%@, %@", recipient, text, success ? @"success" : @"fail"]];
+    }];
     [self enumerateTextViewNumbersWithNumberHandler:^(NSString *number){
-        NSError *error = NULL;
-        BOOL success = [IMessageUtils sendIMessageWithRecipient:number text:@"text" error:&error];
-        NSLog(@"%@, %@", number, success ? @"success" : @"fail");
+        [[IMessageCenter sharedInstance] sendMessageWithRecipient:number text:@"text---"];
     }];
     [self alert:[NSString stringWithFormat:@"cost:%f", [NSDate timeIntervalSinceReferenceDate] - startTime]];
 }
