@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-OBJC_EXPORT NSString *YXImageLabelDefaultImageLeftMatchingText;
-OBJC_EXPORT NSString *YXImageLabelDefaultImageRightMatchingText;
+OBJC_EXPORT NSString *kImageLabelDefaultImageLeftMatchingText;
+OBJC_EXPORT NSString *kImageLabelDefaultImageRightMatchingText;
 
 @interface YXImageLabel : UIView
 

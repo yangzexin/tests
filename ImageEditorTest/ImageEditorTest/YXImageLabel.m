@@ -8,8 +8,8 @@
 
 #import "YXImageLabel.h"
 
-NSString *YXImageLabelDefaultImageLeftMatchingText = @"{IMG";
-NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
+NSString *kImageLabelDefaultImageLeftMatchingText = @"{IMG";
+NSString *kImageLabelDefaultImageRightMatchingText = @"}";
 
 @interface YXDrawBlock : NSObject
 
@@ -85,8 +85,8 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
 {
     self = [super initWithFrame:frame];
     
-    self.imageLeftMatchingText = YXImageLabelDefaultImageLeftMatchingText;
-    self.imageRightMatchingText = YXImageLabelDefaultImageRightMatchingText;
+    self.imageLeftMatchingText = kImageLabelDefaultImageLeftMatchingText;
+    self.imageRightMatchingText = kImageLabelDefaultImageRightMatchingText;
     
     self.font = [UIFont systemFontOfSize:14.0f];
     self.backgroundColor = [UIColor clearColor];
@@ -168,7 +168,7 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
                                 [self addSubview:view];
                             }
                             if(prepareTextBlocks){
-                                [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", YXImageLabelDefaultImageLeftMatchingText, imageName, YXImageLabelDefaultImageRightMatchingText]
+                                [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", kImageLabelDefaultImageLeftMatchingText, imageName, kImageLabelDefaultImageRightMatchingText]
                                                                                      x:tmpX
                                                                                      y:tmpY
                                                                                  width:tmpRect.size.width
@@ -198,7 +198,7 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
                                     [img drawAtPoint:CGPointMake(tmpX, tmpY)];
                                 }
                                 if(prepareTextBlocks){
-                                    [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", YXImageLabelDefaultImageLeftMatchingText, imageName, YXImageLabelDefaultImageRightMatchingText]
+                                    [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", kImageLabelDefaultImageLeftMatchingText, imageName, kImageLabelDefaultImageRightMatchingText]
                                                                                          x:tmpX
                                                                                          y:tmpY
                                                                                      width:img.size.width

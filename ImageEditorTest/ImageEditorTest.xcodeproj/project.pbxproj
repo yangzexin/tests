@@ -17,7 +17,7 @@
 		3E444229178113E6006A713D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E444228178113E6006A713D /* Default@2x.png */; };
 		3E44422B178113E6006A713D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E44422A178113E6006A713D /* Default-568h@2x.png */; };
 		3E4442331781140B006A713D /* YXImageLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4442321781140B006A713D /* YXImageLabel.m */; };
-		3E44423617811431006A713D /* ImageEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E44423517811431006A713D /* ImageEditor.m */; };
+		3E44423617811431006A713D /* YXImageEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E44423517811431006A713D /* YXImageEditor.m */; };
 		3E44423817811AB8006A713D /* account_money.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E44423717811AB7006A713D /* account_money.png */; };
 		3E44424017812A57006A713D /* btn_passbook.png in Resources */ = {isa = PBXBuildFile; fileRef = 3E44423F17812A57006A713D /* btn_passbook.png */; };
 		3E44424317812D39006A713D /* APLSimpleCaretView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E44424217812D39006A713D /* APLSimpleCaretView.m */; };
@@ -39,8 +39,8 @@
 		3E44422A178113E6006A713D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		3E4442311781140B006A713D /* YXImageLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXImageLabel.h; sourceTree = "<group>"; };
 		3E4442321781140B006A713D /* YXImageLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXImageLabel.m; sourceTree = "<group>"; };
-		3E44423417811431006A713D /* ImageEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageEditor.h; sourceTree = "<group>"; };
-		3E44423517811431006A713D /* ImageEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageEditor.m; sourceTree = "<group>"; };
+		3E44423417811431006A713D /* YXImageEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXImageEditor.h; sourceTree = "<group>"; };
+		3E44423517811431006A713D /* YXImageEditor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXImageEditor.m; sourceTree = "<group>"; };
 		3E44423717811AB7006A713D /* account_money.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_money.png; sourceTree = "<group>"; };
 		3E44423F17812A57006A713D /* btn_passbook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn_passbook.png; sourceTree = "<group>"; };
 		3E44424117812D39006A713D /* APLSimpleCaretView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APLSimpleCaretView.h; sourceTree = "<group>"; };
@@ -93,13 +93,13 @@
 			children = (
 				3E4442311781140B006A713D /* YXImageLabel.h */,
 				3E4442321781140B006A713D /* YXImageLabel.m */,
+				3E44423417811431006A713D /* YXImageEditor.h */,
+				3E44423517811431006A713D /* YXImageEditor.m */,
 				3E44423717811AB7006A713D /* account_money.png */,
 				3E44423F17812A57006A713D /* btn_passbook.png */,
 				3E444223178113E6006A713D /* AppDelegate.h */,
 				3E444224178113E6006A713D /* AppDelegate.m */,
 				3E44421B178113E6006A713D /* Supporting Files */,
-				3E44423417811431006A713D /* ImageEditor.h */,
-				3E44423517811431006A713D /* ImageEditor.m */,
 				3E44424117812D39006A713D /* APLSimpleCaretView.h */,
 				3E44424217812D39006A713D /* APLSimpleCaretView.m */,
 			);
@@ -190,7 +190,7 @@
 				3E444221178113E6006A713D /* main.m in Sources */,
 				3E444225178113E6006A713D /* AppDelegate.m in Sources */,
 				3E4442331781140B006A713D /* YXImageLabel.m in Sources */,
-				3E44423617811431006A713D /* ImageEditor.m in Sources */,
+				3E44423617811431006A713D /* YXImageEditor.m in Sources */,
 				3E44424317812D39006A713D /* APLSimpleCaretView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

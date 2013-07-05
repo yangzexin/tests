@@ -6,11 +6,11 @@
 //  Copyright (c) 2013年 yangzexin. All rights reserved.
 //
 
-#import "ImageEditor.h"
+#import "YXImageEditor.h"
 #import "YXImageLabel.h"
 #import "APLSimpleCaretView.h"
 
-@interface ImageEditor () <UIKeyInput, UITextInput>
+@interface YXImageEditor () <UITextInput>
 
 @property(nonatomic, retain)NSMutableString *text;
 @property(nonatomic, retain)YXImageLabel *imageLabel;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation ImageEditor
+@implementation YXImageEditor
 
 @synthesize inputDelegate;
 @dynamic markedTextStyle;
@@ -51,11 +51,6 @@
     self.imageLabel.userInteractionEnabled = NO;
     self.imageLabel.backgroundColor = [UIColor clearColor];
     self.imageLabel.font = [UIFont systemFontOfSize:18.0f];
-    [self.imageLabel setViewGetter:^UIView *(NSString *imageName) {
-        UIImageView *imgView = [[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_passbook.png"]] autorelease];
-        imgView.frame = CGRectMake(0, 0, imgView.image.size.width, imgView.image.size.height);
-        return imgView;
-    }];
     [self addSubview:self.imageLabel];
     
     self.caretView = [[[APLSimpleCaretView alloc] initWithFrame:CGRectZero] autorelease];
@@ -96,6 +91,46 @@
     self.caretView.frame = [self.imageLabel caretRectAtIndex:self.caretPosition];
 }
 
+- (void)setImageLeftMatchingText:(NSString *)imageLeftMatchingText
+{
+    self.imageLabel.imageLeftMatchingText = imageLeftMatchingText;
+}
+
+- (NSString *)imageLeftMatchingText
+{
+    return self.imageLabel.imageLeftMatchingText;
+}
+
+- (void)setImageRightMatchingText:(NSString *)imageRightMatchingText
+{
+    self.imageLabel.imageRightMatchingText = imageRightMatchingText;
+}
+
+- (NSString *)imageRightMatchingText
+{
+    return self.imageLabel.imageRightMatchingText;
+}
+
+- (void)setImageGetter:(UIImage *(^)(NSString *))imageGetter
+{
+    self.imageLabel.imageGetter = imageGetter;
+}
+
+- (UIImage *(^)(NSString *))imageGetter
+{
+    return self.imageLabel.imageGetter;
+}
+
+- (void)setViewGetter:(UIView *(^)(NSString *))viewGetter
+{
+    self.imageLabel.viewGetter = viewGetter;
+}
+
+- (UIView *(^)(NSString *))viewGetter
+{
+    return self.imageLabel.viewGetter;
+}
+
 #pragma mark - events
 - (void)tapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
@@ -120,9 +155,6 @@
 
 - (void)insertText:(NSString *)text
 {
-    if([text isEqualToString:@"i"]){
-        text = [NSString stringWithFormat:@"%@image%@", YXImageLabelDefaultImageLeftMatchingText, YXImageLabelDefaultImageRightMatchingText];
-    }
     [self.text insertString:text atIndex:[self.imageLabel updatePositionForCaretPosition:self.caretPosition]];
     ++self.caretPosition;
     [self updateImageLabel];

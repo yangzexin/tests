@@ -7,7 +7,15 @@
 //
 
 #import "AppDelegate.h"
-#import "ImageEditor.h"
+#import "YXImageEditor.h"
+
+static NSDictionary *keyCodeValueImageName = nil;
+
+@interface AppDelegate ()
+
+@property(nonatomic, retain)YXImageEditor *editor;
+
+@end
 
 @implementation AppDelegate
 
@@ -24,10 +32,37 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
-    ImageEditor *editor = [[[ImageEditor alloc] initWithFrame:CGRectMake(0, 20, 320, 200)] autorelease];
-    [self.window addSubview:editor];
+    keyCodeValueImageName = [@{
+                              @"0" : @"account_money.png",
+                              @"1" : @"btn_passbook.png",
+                              @"2" : @"account_money.png",
+                              @"3" : @"btn_passbook.png",
+                              @"4" : @"account_money.png"
+                              } retain];
+    
+    self.editor = [[[YXImageEditor alloc] initWithFrame:CGRectMake(0, 20, 320, 200)] autorelease];
+    self.editor.imageLeftMatchingText = @"[";
+    self.editor.imageRightMatchingText = @"]";
+    [self.editor setImageGetter:^UIImage *(NSString *imageName) {
+        return [UIImage imageNamed:[keyCodeValueImageName valueForKey:imageName]];
+    }];
+    [self.window addSubview:self.editor];
+    
+    for(NSInteger i = 0; i < 5; ++i){
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [btn setTitle:[NSString stringWithFormat:@"[%d]", i] forState:UIControlStateNormal];
+        btn.frame = CGRectMake(60 * i, 210, 50, 50);
+        btn.tag = i;
+        [btn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
+        [self.window addSubview:btn];
+    }
     
     return YES;
+}
+
+- (void)buttonTapped:(UIButton *)btn
+{
+    [self.editor insertText:btn.currentTitle];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
