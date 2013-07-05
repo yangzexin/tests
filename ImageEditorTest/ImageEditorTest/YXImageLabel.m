@@ -242,7 +242,6 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
     
     CGPoint lastPosition = CGPointMake(tmpX, tmpY);
     self.realHeight = tmpY + tmpLineHeight;
-    NSLog(@"%@", self.textBlocks);
     return lastPosition;
 }
 

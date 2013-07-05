@@ -94,7 +94,6 @@
         [self.caretView removeFromSuperview];
     }
     self.caretView.frame = [self.imageLabel caretRectAtIndex:self.caretPosition];
-    NSLog(@"%f,%f,%f,%f", self.caretView.frame.origin.x, self.caretView.frame.origin.y, self.caretView.frame.size.width, self.caretView.frame.size.height);
 }
 
 #pragma mark - events
