@@ -15,6 +15,8 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
 
 @property(nonatomic, assign)CGFloat x;
 @property(nonatomic, assign)CGFloat y;
+@property(nonatomic, assign)CGFloat width;
+@property(nonatomic, assign)CGFloat height;
 @property(nonatomic, retain)NSString *text;
 
 @end
@@ -29,7 +31,23 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"%f, %f, %@", self.x, self.y, self.text];
+    return [NSString stringWithFormat:@"[%@, %f, %f, %f, %f]", self.text, self.x, self.y, self.width, self.height];
+}
+
+- (BOOL)hitTestPoint:(CGPoint)point
+{
+    return point.x >= self.x && point.x - self.width <= self.x && point.y >= self.y && point.y <= self.y + self.height;
+}
+
++ (id)createWithText:(NSString *)text x:(CGFloat)x y:(CGFloat)y width:(CGFloat)width height:(CGFloat)height
+{
+    YXDrawBlock *block = [[YXDrawBlock new] autorelease];
+    block.text = text;
+    block.x = x;
+    block.y = y;
+    block.width = width;
+    block.height = height;
+    return block;
 }
 
 @end
@@ -96,22 +114,16 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
     [self drawTextWithRect:rect fakeDraw:NO text:self.text];
 }
 
-- (CGPoint)drawTextWithRect:(CGRect)rect fakeDraw:(BOOL)fakeDraw text:(NSString *)text
+- (CGPoint)drawTextWithRect:(CGRect)rect fakeDraw:(BOOL)fakeDraw prepareTextBlocks:(BOOL)prepareTextBlocks text:(NSString *)text
 {
     if(!text){
         self.realHeight = [self.font lineHeight];
         return CGPointMake(0, 0);
     }
     
-    if(!fakeDraw){
+    if(prepareTextBlocks){
         self.textBlocks = [NSMutableArray array];
-    }else{
-        self.textBlocks = nil;
     }
-    
-    NSMutableArray *textBlock = [NSMutableArray array];
-    CGFloat blockPositionX = 0.0f;
-    CGFloat blockPositionY = 0.0f;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     if(!fakeDraw){
@@ -150,15 +162,20 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
                             tmpRect.origin.x = tmpX;
                             tmpRect.origin.y = tmpY;
                             view.frame = tmpRect;
+                            
+                            tmpLineHeight = tmpRect.size.height > tmpLineHeight ? tmpRect.size.height : tmpLineHeight;
                             if(!fakeDraw){
                                 [self addSubview:view];
-                                [self closeTextBlock:textBlock positionX:blockPositionX positionY:blockPositionY];
+                            }
+                            if(prepareTextBlocks){
+                                [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", YXImageLabelDefaultImageLeftMatchingText, imageName, YXImageLabelDefaultImageRightMatchingText]
+                                                                                     x:tmpX
+                                                                                     y:tmpY
+                                                                                 width:tmpRect.size.width
+                                                                                height:tmpLineHeight]];
                             }
                             
                             tmpX += tmpRect.size.width;
-                            blockPositionX = tmpX;
-                            blockPositionY = tmpY;
-                            tmpLineHeight = tmpRect.size.height > tmpLineHeight ? tmpRect.size.height : tmpLineHeight;
                             
                             i = tmpRange.location + 1;
                             continue;
@@ -174,14 +191,20 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
                                     tmpY += tmpLineHeight;
                                     tmpX = 0;
                                 }
+                                
+                                tmpLineHeight = img.size.height > tmpLineHeight ? img.size.height : tmpLineHeight;
+                                
                                 if(!fakeDraw){
                                     [img drawAtPoint:CGPointMake(tmpX, tmpY)];
-                                    [self closeTextBlock:textBlock positionX:blockPositionX positionY:blockPositionY];
+                                }
+                                if(prepareTextBlocks){
+                                    [self.textBlocks addObject:[YXDrawBlock createWithText:[NSString stringWithFormat:@"%@%@%@", YXImageLabelDefaultImageLeftMatchingText, imageName, YXImageLabelDefaultImageRightMatchingText]
+                                                                                         x:tmpX
+                                                                                         y:tmpY
+                                                                                     width:img.size.width
+                                                                                    height:tmpLineHeight]];
                                 }
                                 tmpX += img.size.width;
-                                blockPositionX = tmpX;
-                                blockPositionY = tmpY;
-                                tmpLineHeight = img.size.height > tmpLineHeight ? img.size.height : tmpLineHeight;
                                 
                                 i = tmpRange.location + 1;
                                 continue;
@@ -192,73 +215,40 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
             }
         }
         if([ch isEqualToString:@"\n"]){
-            [self closeTextBlock:textBlock positionX:blockPositionX positionY:blockPositionY];
             tmpX = 0;
             tmpY += tmpLineHeight;
-            blockPositionX = tmpX;
-            blockPositionY = tmpY;
             tmpLineHeight = self.font.lineHeight;
+            if(prepareTextBlocks){
+                [self.textBlocks addObject:[YXDrawBlock createWithText:ch x:tmpX y:tmpY width:1 height:tmpLineHeight]];
+            }
         }else{
             CGFloat strWidth = [ch sizeWithFont:self.font].width;
             if(tmpX + strWidth > rect.size.width){
-                [self closeTextBlock:textBlock positionX:blockPositionX positionY:blockPositionY];
                 tmpX = 0;
                 tmpY += tmpLineHeight;
-                blockPositionX = tmpX;
-                blockPositionY = tmpY;
                 tmpLineHeight = self.font.lineHeight;
             }
             if(!fakeDraw){
-                [self appendCharToTextBlock:textBlock ch:ch];
                 [ch drawAtPoint:CGPointMake(tmpX, tmpY) withFont:self.font];
+            }
+            if(prepareTextBlocks){
+                [self.textBlocks addObject:[YXDrawBlock createWithText:ch x:tmpX y:tmpY width:strWidth height:tmpLineHeight]];
             }
             tmpX += strWidth;
         }
         
         i = charRange.location + charRange.length;
     }
-    [self closeTextBlock:textBlock positionX:blockPositionX positionY:tmpY];
-    
-    if(!fakeDraw){
-//        for(YXDrawBlock *block in self.textBlocks){
-//            NSString *text = block.text;
-//            [text drawAtPoint:CGPointMake(block.x, block.y) withFont:self.font];
-//        }
-    }
     
     CGPoint lastPosition = CGPointMake(tmpX, tmpY);
     self.realHeight = tmpY + tmpLineHeight;
-    
+    NSLog(@"%@", self.textBlocks);
     return lastPosition;
 }
 
-- (void)appendCharToTextBlock:(NSMutableArray *)textBlock ch:(NSString *)ch
+- (CGPoint)drawTextWithRect:(CGRect)rect fakeDraw:(BOOL)fakeDraw text:(NSString *)text
 {
-    [textBlock addObject:ch];
-}
-
-- (YXDrawBlock *)closeTextBlock:(NSMutableArray *)textBlock positionX:(CGFloat)positionX positionY:(CGFloat)positionY
-{
-    NSMutableString *string = [NSMutableString string];
-    for(NSString *ch in textBlock){
-        [string appendString:ch];
-    }
-    [textBlock removeAllObjects];
-    if(string.length != 0){
-        return [self encounterBlockWithPositionX:positionX poisitionY:positionY text:string];
-    }
-    return nil;
-}
-
-- (YXDrawBlock *)encounterBlockWithPositionX:(CGFloat)positionX poisitionY:(CGFloat)positionY text:(NSString *)text
-{
-    YXDrawBlock *block = [[YXDrawBlock new] autorelease];
-    block.x = positionX;
-    block.y = positionY;
-    block.text = text;
-    
-    [self.textBlocks addObject:block];
-    return block;
+    return [self drawTextWithRect:rect fakeDraw:fakeDraw prepareTextBlocks:YES text:text];
 }
 
 - (void)setText:(NSString *)m
@@ -281,14 +271,57 @@ NSString *YXImageLabelDefaultImageRightMatchingText = @"}";
 - (CGRect)caretRectAtIndex:(NSUInteger)index
 {
     const CGFloat caretWidth = 3;
-    NSString *text = [self.text substringToIndex:index];
-    CGPoint position = [self drawTextWithRect:self.bounds fakeDraw:YES text:text];
-    return CGRectMake(position.x, position.y + (self.font.lineHeight - (self.font.descender + self.font.ascender)) / 2, caretWidth, self.font.descender + self.font.ascender);
+    if(index < self.textBlocks.count){
+        YXDrawBlock *targetBlock = [self.textBlocks objectAtIndex:index];
+        return CGRectMake(targetBlock.x, targetBlock.y + (self.font.lineHeight - (self.font.descender + self.font.ascender)) / 2, caretWidth, self.font.descender + self.font.ascender);
+    }else{
+        YXDrawBlock *targetBlock = [self.textBlocks lastObject];
+        return CGRectMake(targetBlock.x + targetBlock.width, targetBlock.y + (self.font.lineHeight - (self.font.descender + self.font.ascender)) / 2, caretWidth, self.font.descender + self.font.ascender);
+    }
 }
 
-- (NSUInteger)caretPositionAtRect:(CGRect)rect
+- (NSUInteger)caretPositionAtPoint:(CGPoint)point
 {
-    return 0;
+    NSInteger index = -1;
+    if(self.textBlocks.count == 0){
+        return 0;
+    }
+    for(NSInteger i = 0; i < self.textBlocks.count; ++i){
+        YXDrawBlock *block = [self.textBlocks objectAtIndex:i];
+        if([block hitTestPoint:point]){
+            index = i;
+            break;
+        }
+    }
+    if(index == -1){
+        index = self.textBlocks.count;
+    }
+    return index;
+}
+
+- (NSString *)charAtIndex:(NSInteger)index
+{
+    if(index < self.textBlocks.count){
+        YXDrawBlock *block = [self.textBlocks objectAtIndex:index];
+        return block.text;
+    }
+    return nil;
+}
+
+- (NSInteger)updatePositionForCaretPosition:(NSInteger)caretPosition
+{
+    NSInteger numOfChars = 0;
+    for(NSInteger i = 0; i < self.textBlocks.count && i < caretPosition; ++i){
+        YXDrawBlock *block = [self.textBlocks objectAtIndex:i];
+        numOfChars += block.text.length;
+    }
+    return numOfChars;
+}
+
+- (NSInteger)numberOfDeleteCharsForCaretPosition:(NSInteger)caretPosition
+{
+    YXDrawBlock *block = [self.textBlocks objectAtIndex:caretPosition - 1];
+    return block.text.length;
 }
 
 @end

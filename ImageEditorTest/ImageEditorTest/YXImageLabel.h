@@ -32,6 +32,9 @@ OBJC_EXPORT NSString *YXImageLabelDefaultImageRightMatchingText;
 
 - (void)resizeToSuitableHeight;
 - (CGRect)caretRectAtIndex:(NSUInteger)index;
-- (NSUInteger)caretPositionAtRect:(CGRect)rect;
+- (NSUInteger)caretPositionAtPoint:(CGPoint)point;
+- (NSString *)charAtIndex:(NSInteger)index;
+- (NSInteger)updatePositionForCaretPosition:(NSInteger)caretPosition;
+- (NSInteger)numberOfDeleteCharsForCaretPosition:(NSInteger)caretPosition;
 
 @end

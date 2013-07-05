@@ -19,7 +19,7 @@
 
 @property(nonatomic, retain)NSString *markingText;
 
-@property(nonatomic, assign)NSUInteger caretPosition;
+@property(nonatomic, assign)NSInteger caretPosition;
 @property(nonatomic, retain)APLSimpleCaretView *caretView;
 
 @end
@@ -80,6 +80,11 @@
     }else{
         self.contentOffset = CGPointMake(0, 0);
     }
+    [self updateCaretView];
+}
+
+- (void)updateCaretView
+{
     if([self isFirstResponder]){
         if(!self.caretView.superview){
             [self addSubview:self.caretView];
@@ -89,12 +94,22 @@
         [self.caretView removeFromSuperview];
     }
     self.caretView.frame = [self.imageLabel caretRectAtIndex:self.caretPosition];
+    NSLog(@"%f,%f,%f,%f", self.caretView.frame.origin.x, self.caretView.frame.origin.y, self.caretView.frame.size.width, self.caretView.frame.size.height);
 }
 
 #pragma mark - events
 - (void)tapGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
 {
-    [self becomeFirstResponder];
+    if(![self isFirstResponder]){
+        [self becomeFirstResponder];
+    }
+    if([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]){
+        UITapGestureRecognizer *tapGestureRecognizer = (id)gestureRecognizer;
+        CGPoint point = [tapGestureRecognizer locationInView:self];
+        NSInteger index = [self.imageLabel caretPositionAtPoint:point];
+        self.caretPosition = index;
+        [self updateCaretView];
+    }
 }
 
 
@@ -109,28 +124,24 @@
     if([text isEqualToString:@"i"]){
         text = [NSString stringWithFormat:@"%@image%@", YXImageLabelDefaultImageLeftMatchingText, YXImageLabelDefaultImageRightMatchingText];
     }
-    [self.text appendString:text];
-    self.caretPosition += text.length;
+    [self.text insertString:text atIndex:[self.imageLabel updatePositionForCaretPosition:self.caretPosition]];
+    ++self.caretPosition;
     [self updateImageLabel];
 }
 
 - (void)deleteBackward
 {
-    if(self.text.length != 0){
-        NSRange charRange = [self.text rangeOfComposedCharacterSequenceAtIndex:self.text.length - 1];
-        NSString *lastChar = [self.text substringWithRange:charRange];
-        if([lastChar isEqualToString:YXImageLabelDefaultImageRightMatchingText]){
-            NSRange leftRange = [self.text rangeOfString:YXImageLabelDefaultImageLeftMatchingText options:NSBackwardsSearch range:NSMakeRange(0, charRange.location)];
-            if(leftRange.location != NSNotFound){
-                charRange = NSMakeRange(leftRange.location, charRange.location - leftRange.location + 1);
-            }
-        }
+    if(self.text.length != 0 && self.caretPosition != 0){
+        NSInteger numOfDeleteChars = [self.imageLabel numberOfDeleteCharsForCaretPosition:self.caretPosition];
+        NSRange charRange = NSMakeRange([self.imageLabel updatePositionForCaretPosition:self.caretPosition] - numOfDeleteChars, numOfDeleteChars);
         
         [self.text deleteCharactersInRange:charRange];
-        self.caretPosition -= charRange.length;
+        --self.caretPosition;
         [self updateImageLabel];
     }
 }
+
+#pragma mark - override methods
 
 #pragma mark - UITextInput
 - (NSString *)textInRange:(UITextRange *)range
