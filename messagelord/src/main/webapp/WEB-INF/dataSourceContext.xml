@@ -84,4 +84,8 @@
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
     
+    <bean id="uploadContactNumberDao" class="com.yzx.messagelord.dao.impl.UploadContactNumberDaoImpl" init-method="createTableIfNotExists">
+    	<property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
 </beans>

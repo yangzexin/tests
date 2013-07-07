@@ -44,8 +44,8 @@ public class MessageTaskDaoImpl extends JdbcTemplateSupport implements MessageTa
 	@Override
 	public void update(MessageTask mt) {
 		// TODO Auto-generated method stub
-		this.getJdbcTemplate().update("update message_tasks set destinationNumber=?, deliverDate=?, state=?, distributeDate=?, appleIdOfHandler", 
-				mt.getDestinationNumber(), mt.getDeliverDate(), mt.getState(), mt.getDistributeDate(), mt.getAppleIdOfHandler());
+		this.getJdbcTemplate().update("update message_tasks set destinationNumber=?, deliverDate=?, state=?, distributeDate=?, appleIdOfHandler=? where uid=?", 
+				mt.getDestinationNumber(), mt.getDeliverDate(), mt.getState(), mt.getDistributeDate(), mt.getAppleIdOfHandler(), mt.getUid());
 	}
 
 	private static void processMessageTask(ResultSet rs, MessageTask mt) throws SQLException{
@@ -60,8 +60,8 @@ public class MessageTaskDaoImpl extends JdbcTemplateSupport implements MessageTa
 	
 	private synchronized void restoreState(){
 		final ArrayList<MessageTask> list = new ArrayList<MessageTask>();
-		
-		int minute = 10;
+		System.out.println("start restore message task state");
+		int minute = 1;
 		long dateTime = System.currentTimeMillis() - minute * 60 * 1000;
 		this.getJdbcTemplate().query("select * from message_tasks where state=? and distributeDate<?", new RowCallbackHandler() {
 			
@@ -78,8 +78,10 @@ public class MessageTaskDaoImpl extends JdbcTemplateSupport implements MessageTa
 			for(MessageTask task : list){
 				task.setState(MessageTask.STATE_UNHANDLED);
 				this.update(task);
+				System.out.println(task.getUid() + ", " + task.getDestinationNumber() + ", " + task.getGroupId());
 			}
 		}
+		System.out.println("finish restore message task state");
 	}
 	
 	@Override
@@ -99,6 +101,7 @@ public class MessageTaskDaoImpl extends JdbcTemplateSupport implements MessageTa
 		}, MessageTask.STATE_UNHANDLED, amount);
 		for(MessageTask tmp : list){
 			tmp.setState(MessageTask.STATE_DISTRIBUTED);
+			tmp.setDistributeDate(System.currentTimeMillis());
 			this.update(tmp);
 		}
 		
@@ -109,7 +112,7 @@ public class MessageTaskDaoImpl extends JdbcTemplateSupport implements MessageTa
 	public List<MessageTask> list(int beginIndex, int endIndex) {
 		// TODO Auto-generated method stub
 		final ArrayList<MessageTask> list = new ArrayList<MessageTask>();
-		this.getJdbcTemplate().query("select * from message_tasks limit 0, ?", new RowCallbackHandler() {
+		this.getJdbcTemplate().query("select * from message_tasks limit ?, ?", new RowCallbackHandler() {
 			
 			@Override
 			public void processRow(ResultSet rs) throws SQLException {
