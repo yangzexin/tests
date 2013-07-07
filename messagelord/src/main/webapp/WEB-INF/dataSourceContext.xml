@@ -76,6 +76,10 @@
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
     
+    <bean id="commercialUserService" class="com.yzx.messagelord.service.impl.CommercialUserServiceImpl">
+    	<property name="commercialUserDao" ref="commercialUserDao" />
+    </bean>
+    
     <bean id="messageTaskDao" class="com.yzx.messagelord.dao.impl.MessageTaskDaoImpl" init-method="createTableIfNotExists">
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>

@@ -18,6 +18,12 @@
 	<import resource="imessageContext.xml"/>
 	<context:component-scan base-package="com.yzx.messagelord.controller" />
 	<mvc:annotation-driven />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/commercial*.do"/>
+			<bean class="com.yzx.messagelord.intercepter.CommercialSessionIntercepter" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<bean class="com.yzx.messagelord.util.SharedContext" />
 	

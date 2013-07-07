@@ -71,8 +71,8 @@ public class CommercialUserDaoImpl extends JdbcTemplateSupport implements Commer
 			}
 			
 		}, uid);
-		
-		return user;
+
+		return user.getUid() == null ? null : user;
 	}
 
 	@Override
@@ -90,6 +90,23 @@ public class CommercialUserDaoImpl extends JdbcTemplateSupport implements Commer
 			}
 		}, beginIndex, endIndex - beginIndex);
 		return list;
+	}
+
+	@Override
+	public CommercialUser getByUsername(String username) {
+		// TODO Auto-generated method stub
+		final CommercialUser user = new CommercialUser();
+		this.getJdbcTemplate().query("select * from commercial_users where username=?", new RowCallbackHandler(){
+
+			@Override
+			public void processRow(ResultSet arg0) throws SQLException {
+				// TODO Auto-generated method stub
+				processCommercialUser(arg0, user);
+			}
+			
+		}, username);
+		
+		return user.getUid() == null ? null : user;
 	}
 
 }
