@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "user")
 public class iMessageUser {
 	public static final int STATE_PROBED = 1;
-	public static final int STATE_UNPROBED = 0;
+	public static final int STATE_UNHANDLED = 0;
 	public static final int STATE_DISTRIBUTED = 2;
 	private String uid;
 	private String number;

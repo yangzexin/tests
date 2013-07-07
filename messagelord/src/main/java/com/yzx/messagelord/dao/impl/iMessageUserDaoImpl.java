@@ -113,14 +113,14 @@ public class iMessageUserDaoImpl extends JdbcTemplateSupport implements iMessage
 		System.out.println(new Date() + "\tstart restore imessage users");
 		for(iMessageUser user : outOfDateList){
 			System.out.println("restore state of number:" + user.getNumber() + ", " + user.getUid());
-			user.setState(iMessageUser.STATE_UNPROBED);
+			user.setState(iMessageUser.STATE_UNHANDLED);
 			this.update(user);
 		}
 		System.out.println(new Date() + "\tfinish restore imessage users" + "\n");
 		
 		final ArrayList<iMessageUser> list = new ArrayList<iMessageUser>();
 		String sql = "select * from imessage_users where state=" 
-				+ iMessageUser.STATE_UNPROBED + " limit 0," + size;
+				+ iMessageUser.STATE_UNHANDLED + " limit 0," + size;
 		this.getJdbcTemplate().query(sql, new RowCallbackHandler(){
 
 			@Override

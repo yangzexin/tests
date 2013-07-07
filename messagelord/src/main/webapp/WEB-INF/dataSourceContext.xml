@@ -76,4 +76,12 @@
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
     
+    <bean id="messageTaskDao" class="com.yzx.messagelord.dao.impl.MessageTaskDaoImpl" init-method="createTableIfNotExists">
+    	<property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="messageTaskGroupDao" class="com.yzx.messagelord.dao.impl.MessageTaskGroupDaoImpl" init-method="createTableIfNotExists">
+    	<property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
 </beans>
