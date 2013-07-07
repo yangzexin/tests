@@ -8,13 +8,13 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 public class CommonController {
 	
-	@RequestMapping(value = "/")
-	public ModelAndView manageCenter(){
-		return new ModelAndView(new RedirectView("message/index.do"));
-	}
+//	@RequestMapping(value = "/")
+//	public ModelAndView manageCenter(){
+//		return new ModelAndView(new RedirectView("message/index.do"));
+//	}
 	
-	@RequestMapping(value = "index.do")
-	public ModelAndView indexPage(){
-		return manageCenter();
-	}
+//	@RequestMapping(value = "index.do")
+//	public ModelAndView indexPage(){
+//		return manageCenter();
+//	}
 }
