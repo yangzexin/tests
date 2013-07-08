@@ -20,7 +20,7 @@
 	<mvc:annotation-driven />
 	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/commercial*.do"/>
+			<mvc:mapping path="/commercial*"/>
 			<bean class="com.yzx.messagelord.intercepter.CommercialSessionIntercepter" />
 		</mvc:interceptor>
 	</mvc:interceptors>

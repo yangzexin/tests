@@ -17,4 +17,12 @@ public class CommonController {
 //	public ModelAndView indexPage(){
 //		return manageCenter();
 //	}
+	
+	public static ModelAndView commonRedirect(String pageName, String msg){
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("common_redirect");
+		mv.addObject("jumpPageName", pageName);
+		mv.addObject("msg", msg);
+		return mv;
+	}
 }

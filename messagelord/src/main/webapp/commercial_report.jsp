@@ -6,14 +6,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>合作用户管理中心</title>
+<title>报表</title>
 </head>
 <body>
 	<%@ include file="commercial_navigation.jsp" %>
-	<div style="color:red;">
-		<c:out value="${errorMsg }"></c:out>
-	</div>
-	<div>
-	</div>
 </body>
 </html>

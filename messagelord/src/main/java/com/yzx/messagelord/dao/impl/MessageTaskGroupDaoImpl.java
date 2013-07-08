@@ -21,8 +21,8 @@ public class MessageTaskGroupDaoImpl extends JdbcTemplateSupport implements Mess
 		keyFieldValueAttribute.put("addDate", "bigint");
 		keyFieldValueAttribute.put("title", "text");
 		keyFieldValueAttribute.put("numberOfTasks", "bigint");
-		keyFieldValueAttribute.put("messageContentId", "text");
-		keyFieldValueAttribute.put("commercialUserId", "text");
+		keyFieldValueAttribute.put("messageContentId", "integer");
+		keyFieldValueAttribute.put("commercialUserId", "integer");
 		this.getJdbcTemplate().execute(this.sqlForCreateTable("message_task_groups", keyFieldValueAttribute));
 	}
 	

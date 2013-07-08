@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 
 import com.yzx.messagelord.dao.UploadContactNumberDao;
 import com.yzx.messagelord.model.UploadContactNumber;
+import com.yzx.messagelord.model.UploadContactNumberGroup;
 import com.yzx.messagelord.util.JdbcTemplateSupport;
 
 public class UploadContactNumberDaoImpl extends JdbcTemplateSupport implements UploadContactNumberDao {
@@ -18,6 +19,7 @@ public class UploadContactNumberDaoImpl extends JdbcTemplateSupport implements U
 	public void createTableIfNotExists(){
 		Map<String, String> keyFieldValueAttr = new HashMap<String, String>();
 		keyFieldValueAttr.put("uid", "bigint primary key auto_increment");
+		keyFieldValueAttr.put("groupId", "integer");
 		keyFieldValueAttr.put("destinationNumber", "text");
 		keyFieldValueAttr.put("commercialUserId", "integer");
 		keyFieldValueAttr.put("imessageUser", "boolean");
@@ -28,15 +30,15 @@ public class UploadContactNumberDaoImpl extends JdbcTemplateSupport implements U
 	@Override
 	public void add(UploadContactNumber num) {
 		// TODO Auto-generated method stub
-		this.getJdbcTemplate().update("insert into upload_contact_number(destinationNumber, commercialUserId, imessageUser) values(?,?,?)", 
-				num.getDestinationNumber(), num.getCommercialUserId(), num.isImessageUser());
+		this.getJdbcTemplate().update("insert into upload_contact_number(destinationNumber, groupId, commercialUserId, imessageUser) values(?,?,?,?)", 
+				num.getDestinationNumber(), num.getGroupId(), num.getCommercialUserId(), num.isImessageUser());
 	}
 
 	@Override
 	public void update(UploadContactNumber num) {
 		// TODO Auto-generated method stub
-		this.getJdbcTemplate().update("update upload_contact_number set destinationNumber=?, commercialUserId=?, imessageUser=? where uid=?", 
-				num.getDestinationNumber(), num.getCommercialUserId(), num.isImessageUser(), num.getUid());
+		this.getJdbcTemplate().update("update upload_contact_number set destinationNumber=?, groupId=?, commercialUserId=?, imessageUser=? where uid=?", 
+				num.getDestinationNumber(), num.getGroupId(), num.getCommercialUserId(), num.isImessageUser(), num.getUid());
 	}
 
 	@Override
@@ -47,6 +49,7 @@ public class UploadContactNumberDaoImpl extends JdbcTemplateSupport implements U
 
 	private static void processUploadContactNumber(ResultSet rs, UploadContactNumber num) throws SQLException{
 		num.setUid(rs.getString("uid"));
+		num.setGroupId(rs.getString("groupId"));
 		num.setCommercialUserId(rs.getString("commercialUserId"));
 		num.setDestinationNumber(rs.getString("destinationNumber"));
 		num.setImessageUser(rs.getBoolean("imessageUser"));
@@ -99,6 +102,19 @@ public class UploadContactNumberDaoImpl extends JdbcTemplateSupport implements U
 		// TODO Auto-generated method stub
 		Long count = this.getJdbcTemplate().queryForObject("select count(uid) from upload_contact_number where commercialUserId=?", Long.class, commercialUserId);
 		return count.longValue();
+	}
+
+	@Override
+	public long countByGroupId(String groupId) {
+		// TODO Auto-generated method stub
+		Long count = this.getJdbcTemplate().queryForObject("select count(uid) from upload_contact_number where groupId=?", Long.class, groupId);
+		return count.longValue();
+	}
+
+	@Override
+	public void removeByGroup(UploadContactNumberGroup group) {
+		// TODO Auto-generated method stub
+		this.getJdbcTemplate().update("delete from upload_contact_number where groupId=?", group.getUid());
 	}
 
 }

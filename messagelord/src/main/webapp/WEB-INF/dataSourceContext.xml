@@ -92,4 +92,13 @@
     	<property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
     
+    <bean id="uploadContactNumberGroupDao" class="com.yzx.messagelord.dao.impl.UploadContactNumberGroupDaoImpl" init-method="createTableIfNotExists">
+    	<property name="jdbcTemplate" ref="jdbcTemplate" />
+    </bean>
+    
+    <bean id="commercialUploadNumberService" class="com.yzx.messagelord.service.impl.CommercialUploadNumberServiceImpl">
+    	<property name="uploadNumberDao" ref="uploadContactNumberDao" />
+    	<property name="uploadNumberGroupDao" ref="uploadContactNumberGroupDao" />
+    </bean>
+    
 </beans>

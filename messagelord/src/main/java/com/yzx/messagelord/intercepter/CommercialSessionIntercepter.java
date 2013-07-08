@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.yzx.messagelord.controller.CommercialUserController;
+import com.yzx.messagelord.context.Constants;
 
 public class CommercialSessionIntercepter extends HandlerInterceptorAdapter  {
 
@@ -20,7 +20,7 @@ public class CommercialSessionIntercepter extends HandlerInterceptorAdapter  {
 			HttpServletResponse response, Object handler) throws Exception {
 		// TODO Auto-generated method stub
 		String url = request.getRequestURI().toString();
-		Object user = request.getSession().getAttribute(CommercialUserController.commercialUserSessionKey);
+		Object user = request.getSession().getAttribute(Constants.commercialUserSessionKey);
 		boolean valid = this.isUrlValid(url);
 		if(user != null || valid){
 			return super.preHandle(request, response, handler);

@@ -10,6 +10,6 @@
 <title>登录</title>
 </head>
 <body>
-	跳转到登录页面中。。<a href="commercialLogin.do">点击跳转</a>
+	用户未登录，正在跳转到登录页面中。。<a href="commercialLogin.do">点击跳转</a>
 </body>
 </html>

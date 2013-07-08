@@ -4,6 +4,7 @@ public class UploadContactNumber {
 	private String uid;
 	private String destinationNumber;
 	private String commercialUserId;
+	private String groupId;
 	private boolean imessageUser;
 	
 	public String getUid() {
@@ -29,5 +30,11 @@ public class UploadContactNumber {
 	}
 	public void setImessageUser(boolean imessageUser) {
 		this.imessageUser = imessageUser;
+	}
+	public String getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
 	}
 }
