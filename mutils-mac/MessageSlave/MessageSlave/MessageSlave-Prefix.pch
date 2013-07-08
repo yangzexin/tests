@@ -1,9 +1,0 @@
-//
-// Prefix header for all source files of the 'MessageSlave' target in the 'MessageSlave' project
-//
-
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
-    #import "MSLogger.h"
-    #define MSLog(...) [[MSLogger defaultLogger] log:[NSString stringWithFormat:__VA_ARGS__]]
-#endif

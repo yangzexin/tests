@@ -1,4 +1,0 @@
-
-@interface SingleSendController: UIViewController
-
-@end
