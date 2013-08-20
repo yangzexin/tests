@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Simple Map</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+            <meta charset="utf-8">
+                <style>
+                    html, body, #map-canvas {
+                        margin: 0;
+                        padding: 0;
+                        height: 100%;
+                    }
+                    </style>
+                <script src="http://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&language=zh-CN"></script>
+                <script>
+                    var map;
+                    function initialize() {
+                        var mapOptions = {
+                            zoom : $zoom,
+                            center : new google.maps.LatLng($latitude, $longitide),
+                            mapTypeId : google.maps.MapTypeId.ROADMAP,
+                            zoomControl : false,
+                            panControl : false,
+                            draggable : false,
+                            overviewMapControl : false,
+                            mapTypeControl : false,
+                            scrollwheel : false
+                        };
+                        if(typeof(google) == "undefined"){
+                        }else{
+                            window.location.href = "cmd://MAP_LOAD_START";
+                            map = new google.maps.Map(document.getElementById('map-canvas'),
+                                                      mapOptions);
+                            google.maps.event.addListener(map, 'tilesloaded', function() {
+                                                          var bounds = map.getBounds();
+                                                          var northEast = bounds.getNorthEast();
+                                                          var southWest = bounds.getSouthWest();
+                                                          window.location.href = "cmd://MAP_LOAD_COMPLETE(" + northEast.lat() + "," + northEast.lng() + ")" + "(" + southWest.lat() + "," + southWest.lng() + ")";
+                                                          });
+                        }
+                    }
+                    </script>
+                </head>
+    <body onload="initialize()">
+        <div id="map-canvas"></div>
+    </body>
+</html>
